@@ -85,6 +85,13 @@
          *
          *  2. 逻辑
          *
+         *
+         *  父子组件之间数据的传递
+         *
+         *    父亲-》儿子  单向数据流  父级-》子级
+         *
+         *    子->父
+         *
          * */
 
          Vue.component("custom-select",{
@@ -100,7 +107,8 @@
                     toggle(){
                         this.hidden=!this.hidden;
                     },
-                    show(val){
+
+                    abcd(val){
                         this.val=val;
                         this.hidden=!this.hidden;
                     }
@@ -113,12 +121,26 @@
             </div>
             <div class="btn">{{title}}</div>
         </div>
-        <ul class="list" v-show="hidden">
+            <custom-list :hidden="hidden" :listdata="listdata" @aaaa="abcd"></custom-list>
+     </div>`
+            });
+
+
+         //列表的组件
+         Vue.component("custom-list",{
+             props:["hidden","listdata"],
+             methods:{
+                    show(val){
+                        this.$emit("aaaa",val);
+                    }
+             },
+             template:`<ul class="list" v-show="hidden">
             <li v-for="item in listdata" @click="show(item)">{{item}}</li>
 
-        </ul>
-     </div>`
-            })
+        </ul>`
+         })
+
+
 
 
             new Vue({
